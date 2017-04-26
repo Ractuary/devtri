@@ -10,11 +10,14 @@
   \item{age}{the development age of the losses}
   \item{value}{the value of the losses}
 }}
+\source{
+ChainLadder R package
+}
 \usage{
 RAA
 }
 \description{
 This data was originally provided by the excellent \code{ChainLadder}
-and was slightly modified for use in \code{devtri}
+package and was slightly modified for use in \code{devtri}
 }
 \keyword{datasets}

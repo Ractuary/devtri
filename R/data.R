@@ -9,5 +9,5 @@
 #'   \item{age}{the development age of the losses}
 #'   \item{value}{the value of the losses}
 #' }
-#'
+#' @source ChainLadder R package
 "RAA"
