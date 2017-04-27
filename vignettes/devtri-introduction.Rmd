@@ -13,12 +13,12 @@ The `devtri` package makes it easy to work with actuarial loss development trian
 
 ### Step 1: Load the pakage look at the data
 
-we will be working with the `tri_data` data set which comes from the \code{devtri}.
+we will be working with the `tri_data` data set which comes from the `devtri` package.  This data is just an ordinary data frame with 3 columns.
 
-```{r load_data}
+```{r load_data, message=FALSE}
 library(devtri)
 
-tri_data
+head(tri_data, 10)
 ```
 
 ### Step 2
@@ -34,6 +34,66 @@ my_tri <- tidy_tri(
 my_tri
 ```
 
+This object now includes class `tidy_tri`.
+
+```{r}
+class(my_tri)
+```
+
+As you have probably noticed, this object does not look like a triangle.  It is still in tidy/long form where each row represents one observation.  Keeping the data in a tidy form makes it much easier to work with. If you want to create an actual triange, run: 
+
 ```{r}
 spread_tri(my_tri)
+```
+
+Trinagles in the form shown above will not be used in any of the development functions, but they are conventiant for viewing and presenting.
+
+### Step 3
+
+Calculate the agte-to-age development factors and select the development factors we will use in our reserve estimation.
+
+```{r}
+my_ata <- tidy_ata(my_tri)
+
+my_ata
+```
+
+```{r}
+spread_tri(my_ata)
+```
+
+Here we are just going to use the straight average for the ldfs.
+
+```{r }
+my_ldf <- ldf_avg(my_ata)
+my_ldf
+```
+
+Convert to cdf
+
+```{r}
+my_cdf <- idf2cdf(my_ldf)
+my_cdf
+```
+
+### Step 4
+
+Get latest losses
+
+```{r}
+my_latest <- latest(my_tri)
+
+my_latest
+```
+
+### Step 5
+
+Run development projection
+
+```{r}
+est <- left_join(my_latest, my_cdf[, -3], by = "age")
+
+est <- est %>%
+         mutate(est_ult = value * ldf)
+est
 ```

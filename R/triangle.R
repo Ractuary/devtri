@@ -57,22 +57,22 @@ spread_tri <- function(tri) {
 #' age_data <- c(1, 1, 1, 2, 2, 3)
 #' value_data <- c(10, 11, 10, 15, 16, 17)
 #'
-#' tri <- triangle(origin = origin_data,
+#' tidy_tri <- triangle(origin = origin_data,
 #'                    age = age_data,
 #'                    value = value_data)
 #'
-#' ata(my_tri)
+#' tidy_ata(my_tri)
 #'
 #' tri <- my_tri
 #'
-tisy_ata <- function(tri, ...) {
-  stopifnot(inherits(tri, "triangle"))
+tidy_ata <- function(tri, ...) {
+  stopifnot(inherits(tri, "tidy_tri"))
 
   out <- tri %>%
     dplyr::group_by(origin) %>%
     dplyr::mutate(
       value_lead = dplyr::lead(value, by = age),
-      ata = value_lead / value) %>%
+      value = value_lead / value) %>%
     ungroup() %>%
     dplyr::select(origin, age, value)
 
@@ -81,3 +81,49 @@ tisy_ata <- function(tri, ...) {
     class = c("ata", class(out))
   )
 }
+
+
+#' ldf_avg
+#'
+#' straight average of eacg age in a \code{tidy_tri}
+#'
+#' @param tri \code{tidy_tri} object
+#'
+#' @import dplyr
+#'
+#' @export
+#'
+#' @examples
+#'
+#'
+ldf_avg <- function(tri) {
+  out <- tri %>%
+    dplyr::group_by(age) %>%
+    dplyr::summarise(ldfs = mean(value, na.rm = TRUE))
+
+  # assuming tail factor = to 1.0 for placeholder
+  ldfs <- out$ldfs
+  ldfs[is.na(ldfs)] <- 1.0
+
+  idf(ldfs, first_age = min(tri$age))
+}
+
+#' latest
+#'
+#' get the latest value from a \code{tidy_tri}
+#'
+#' @param tri
+#'
+#' @import dplyr
+#'
+#' @export
+#'
+#' @examples
+#'
+latest <- function(tri) {
+  tri %>%
+    dplyr::mutate(cal = origin + age) %>%
+    dplyr::filter(cal == max(cal)) %>%
+    dplyr::select(-cal)
+}
+
