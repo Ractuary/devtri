@@ -1,0 +1,39 @@
+---
+title: "Introduction to devtri"
+author: "Andy Merlino"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The `devtri` package makes it easy to work with actuarial loss development triangles in R.  Triangle
+
+### Step 1: Load the pakage look at the data
+
+we will be working with the `tri_data` data set which comes from the \code{devtri}.
+
+```{r load_data}
+library(devtri)
+
+tri_data
+```
+
+### Step 2
+
+Turn the above data frame into a triangle object
+
+```{r}
+my_tri <- tidy_tri(
+   origin = tri_data$origin,
+   age = tri_data$dev,
+   value = tri_data$paid)
+
+my_tri
+```
+
+```{r}
+spread_tri(my_tri)
+```

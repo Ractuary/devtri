@@ -1,6 +1,6 @@
-#' triangle
+#' tidy_tri
 #'
-#' \code{triangle} class constructor
+#' \code{tidy_tri} class constructor.
 #'
 #' @param origin origin
 #' @param age age
@@ -20,7 +20,7 @@
 #'                    age = age_data,
 #'                    value = value_data)
 #'
-triangle <- function(origin, age, value) {
+tidy_tri <- function(origin, age, value) {
 
   tib <- tibble::tibble(
     "origin" = origin,
@@ -30,18 +30,17 @@ triangle <- function(origin, age, value) {
 
   structure(
     tib,
-    class = c("triangle", class(tib))
+    class = c("tidy_tri", class(tib))
   )
 }
 
 #' @export
-print.triangle <- function(tri) {
+spread_tri <- function(tri) {
   tri %>%
-    tidyr::spread(key = age, value = value) %>%
-    print()
+    tidyr::spread(key = age, value = value)
 }
 
-#' ata
+#' tidy_ata
 #'
 #' creates age-to-age development triangles
 #'
@@ -58,28 +57,27 @@ print.triangle <- function(tri) {
 #' age_data <- c(1, 1, 1, 2, 2, 3)
 #' value_data <- c(10, 11, 10, 15, 16, 17)
 #'
-#' my_tri <- triangle(origin = origin_data,
+#' tri <- triangle(origin = origin_data,
 #'                    age = age_data,
 #'                    value = value_data)
 #'
 #' ata(my_tri)
 #'
-ata <- function(tri, ...) {
+#' tri <- my_tri
+#'
+tisy_ata <- function(tri, ...) {
   stopifnot(inherits(tri, "triangle"))
 
   out <- tri %>%
+    dplyr::group_by(origin) %>%
     dplyr::mutate(
       value_lead = dplyr::lead(value, by = age),
-      value = value_lead / value) %>%
+      ata = value_lead / value) %>%
+    ungroup() %>%
     dplyr::select(origin, age, value)
 
   structure(
     out,
     class = c("ata", class(out))
   )
-}
-
-#' @export
-print.ata <- function(ata) {
-  ata %>% print.triangle()
 }
