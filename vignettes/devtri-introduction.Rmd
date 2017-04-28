@@ -9,11 +9,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The `devtri` package makes it easy to work with actuarial loss development triangles in R.  Triangle
+The `devtri` package, short for **dev**elopment **tri**angle, makes it easy to work with actuarial loss development triangles.
 
 ### Step 1: Load the pakage look at the data
 
-we will be working with the `tri_data` data set which comes from the `devtri` package.  This data is just an ordinary data frame with 3 columns.
+We will be working with the `tri_data` data set which comes from the `devtri` package.  This data is just an ordinary data frame with 3 columns.
 
 ```{r load_data, message=FALSE}
 library(devtri)
@@ -65,7 +65,7 @@ spread_tri(my_ata)
 Here we are just going to use the straight average for the ldfs.
 
 ```{r }
-my_ldf <- ldf_avg(my_ata)
+my_ldf <- ldf_avg(my_tri)
 my_ldf
 ```
 
@@ -96,4 +96,18 @@ est <- left_join(my_latest, my_cdf[, -3], by = "age")
 est <- est %>%
          mutate(est_ult = value * ldf)
 est
+```
+
+You can use a dollar weighted average instead of a straight average: 
+
+```{r}
+ldf_avg_wtd(my_tri)
+```
+
+### Interpolation
+
+linearly interpolate our cdf 0.25 periods into the future:
+
+```{r}
+interpolate_linear(my_cdf, dev = 0.25)
 ```
