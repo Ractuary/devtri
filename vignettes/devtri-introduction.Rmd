@@ -109,5 +109,5 @@ ldf_avg_wtd(my_tri)
 linearly interpolate our cdf 0.25 periods into the future:
 
 ```{r}
-interpolate_linear(my_cdf, dev = 0.25)
+#interpolate_linear(my_cdf, dev = 0.25)
 ```

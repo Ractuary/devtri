@@ -16,7 +16,7 @@ interpolate a \code{cdf} object to future ages
 }
 \examples{
 
-my_cdf <- cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
+cdf <- cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 
 interpolate_linear(my_cdf)
 }

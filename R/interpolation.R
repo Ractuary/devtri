@@ -11,7 +11,7 @@
 #'
 #' @examples
 #'
-#' my_cdf <- cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
+#' cdf <- cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 #'
 #' interpolate_linear(my_cdf)
 interpolate_linear <- function(cdf, dev= 0.5) {
@@ -46,7 +46,16 @@ interpolate_linear <- function(cdf, dev= 0.5) {
     select(age, ldf, earned_ratio)
 
 
-  # TODO: reapply new tail here if possible
+  if (is.na(attr(cdf, "tail"))) {
+    hold$ldf[hold$age == max(hold$age)] <- 1.0
+    #warning("No tail: setting final development factor to 1.0")
+  }
 
-  hold
+  # create new cdf object with new tail
+  cdf(
+    ldfs = hold$ldf,
+    first_age = min(hold$age, na.rm = TRUE),
+    tail = attr(cdf, tail_call)
+  )
+
 }

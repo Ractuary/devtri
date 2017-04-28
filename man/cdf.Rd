@@ -17,6 +17,6 @@ cdf(ldfs, first_age = 1, tail = NA)
 Create an object of class \code{cdf}
 }
 \examples{
-cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)
+test <- cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)
 cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 }

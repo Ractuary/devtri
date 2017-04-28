@@ -20,7 +20,7 @@ idf <- function(ldfs, first_age = 1, tail = NA) {
   l <- length(ldfs)
 
   stopifnot(is.numeric(first_age) && length(first_age) == 1L)
-  stopifnot(first_age > 0 && first_age <= 1)
+  stopifnot(first_age > 0)
   stopifnot(is.numeric(ldfs) && l > 0)
 
   tib <- tibble(
@@ -30,12 +30,18 @@ idf <- function(ldfs, first_age = 1, tail = NA) {
   tib <- tib %>%
     dplyr::mutate(earned_ratio = pmin(age / 1, 1))
 
-  structure(
+  out <- structure(
     tib,
     earn_pattern = "linear",
     tail = tail,
     class = c("idf", class(tib))
   )
+
+  if (!is.na(tail)) {
+    out <- tail_linear(out)
+  }
+
+  out
 }
 
 #' cdf
@@ -52,14 +58,14 @@ idf <- function(ldfs, first_age = 1, tail = NA) {
 #' @import dplyr
 #'
 #' @examples
-#' cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)
+#' test <- cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)
 #' cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 cdf <- function(ldfs, first_age = 1, tail = NA) {
 
   l <- length(ldfs)
 
   stopifnot(is.numeric(first_age) && length(first_age) == 1L)
-  stopifnot(first_age > 0 && first_age <= 1)
+  stopifnot(first_age > 0)
   stopifnot(is.numeric(ldfs) && l > 0)
 
   tib <- tibble(
@@ -70,12 +76,19 @@ cdf <- function(ldfs, first_age = 1, tail = NA) {
   tib <- tib %>%
     dplyr::mutate(earned_ratio = pmin(age / 1, 1))
 
-  structure(
+  out <- structure(
     tib,
     earn_pattern = "linear",
-    tail = tail,
-    class = c("ldf", class(tib))
+    tail_call = tail,
+    tail = NA,
+    class = c("cdf", class(tib))
   )
+
+  if (!is.na(tail)) {
+    out <- tail_linear(out)
+  }
+
+  out
 }
 
 #' idf2cdf
