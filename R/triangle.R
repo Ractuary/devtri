@@ -76,6 +76,10 @@ tidy_ata <- function(tri, ...) {
     ungroup() %>%
     dplyr::select(origin, age, value)
 
+  # if ata value is Inf (i.e value at age is 0 and value_lead > 0)
+  # then set ata value to NA
+  out <- out %>% mutate(value = ifelse(value == Inf, NA, value))
+
   structure(
     out,
     class = c("ata", class(out))
@@ -96,14 +100,45 @@ tidy_ata <- function(tri, ...) {
 #' @examples
 #'
 #'
-ldf_avg <- function(tri) {
-  out <- tri %>%
+ldf_avg <- function(tri, tail = 1.0) {
+  ata <- tidy_ata(tri)
+
+  out <- ata %>%
     dplyr::group_by(age) %>%
     dplyr::summarise(ldfs = mean(value, na.rm = TRUE))
 
   # assuming tail factor = to 1.0 for placeholder
   ldfs <- out$ldfs
-  ldfs[is.na(ldfs)] <- 1.0
+  ldfs[is.na(ldfs)] <- tail
+
+  idf(ldfs, first_age = min(tri$age))
+}
+
+#' ldf_avg_wtd
+#'
+#' dollar weighted average of eacg age in a \code{tidy_tri}
+#'
+#' @param tri \code{tidy_tri} object
+#'
+#' @import dplyr
+#'
+#' @export
+#'
+#' @examples
+#'
+#'
+ldf_avg_wtd <- function(tri) {
+
+  out <- tri %>%
+    dplyr::mutate(value_lead = dplyr::lead(value, by = age)) %>%
+    dplyr::filter(!is.na(value), !is.na(value_lead)) %>%
+    dplyr::group_by(age) %>%
+    dplyr::summarise(value_total = sum(value),
+                     value_lead_total = sum(value_lead)) %>%
+    dplyr::mutate(ldfs = value_lead_total / value_total)
+
+  # assuming tail factor = to 1.0 for placeholder
+  ldfs <- c(out$ldfs, 1.0)
 
   idf(ldfs, first_age = min(tri$age))
 }
