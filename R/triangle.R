@@ -109,14 +109,18 @@ ldf_avg <- function(tri, tail = 1.0) {
   ldfs <- out$ldfs
   ldfs[is.na(ldfs)] <- tail
 
-  idf(ldfs, first_age = min(tri$age))
+  out <- idf(ldfs, first_age = min(tri$age))
+
+  attr(out, "dev_tri") <- tri
+
+  out
 }
 
 #' ldf_avg_wtd
 #'
-#' dollar weighted average of eacg age in a \code{tri}
+#' dollar weighted average of eacg age in a \code{dev_tri}
 #'
-#' @param tri \code{tri} object
+#' @param tri \code{dev_tri} object
 #'
 #' @import dplyr
 #'
@@ -138,7 +142,11 @@ ldf_avg_wtd <- function(tri) {
   # assuming tail factor = to 1.0 for placeholder
   ldfs <- c(out$ldfs, 1.0)
 
-  idf(ldfs, first_age = min(tri$age))
+  out <- idf(ldfs, first_age = min(tri$age))
+
+  attr(out, "dev_tri") <- tri
+
+  out
 }
 
 #' latest

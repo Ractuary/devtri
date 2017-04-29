@@ -37,6 +37,7 @@ idf <- function(ldfs, first_age = 1) {
     earn_pattern = "linear",
     tail_call = NA,
     tail = NA,
+    dev_tri = NA,
     class = c("idf", class(tib))
   )
 }
@@ -79,6 +80,7 @@ cdf <- function(ldfs, first_age = 1) {
     earn_pattern = "linear",
     tail_call = NA,
     tail = NA,
+    dev_tri = NA,
     class = c("cdf", class(tib))
   )
 

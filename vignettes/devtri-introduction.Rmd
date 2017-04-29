@@ -101,7 +101,8 @@ est
 You can use a dollar weighted average instead of a straight average: 
 
 ```{r}
-ldf_avg_wtd(my_tri)
+my_wtd <- ldf_avg_wtd(my_tri)
+my_wtd
 ```
 
 ### Interpolation
