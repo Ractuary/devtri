@@ -1,17 +1,4 @@
-#' tail
-#'
-#' class for ldf tail factor
-#'
-#' @param type type of tail factor
-#' @param args list of arguments to pass to fit that type of tail
-#'
-#'
-#'
-tail <- function(type, args) {
-#  structure(
-#
-#  )
-}
+
 
 #' tail_linear
 #'
@@ -30,29 +17,35 @@ tail <- function(type, args) {
 #'
 #' @examples
 #'
-#' ldf <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
+#' ldfs <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
 #'
-tail_linear <- function(ldf, n_points = 2, cutoff = 25) {
+#' test <- tail_linear(ldfs)
+#'
+tail_linear <- function(ldfs, n_points = 2, cutoff = 25) {
 
-  l <- nrow(ldf)
+  l <- nrow(ldfs)
 
-  trimmed <- ldf[(l - n_points + 1):l, ]
+  # extract only the ldfs that will be used to fit the tail
+  trimmed <- ldfs[(l - n_points + 1):l, ]
 
+  # fit the tail and apply fit to calculate tail
   fit <- lm(trimmed$ldf ~ trimmed$age)
   co <- coef(fit)
 
-  first_tail_age <- ldf$age[l]
+  first_tail_age <- ldfs$age[l] + 1
 
-  ages <- (first_tail_age + 1):cutoff
+  ages <- first_tail_age:cutoff
   tail_ldfs <- co[1] + co[2] * ages
   tail_ldfs <- pmax(tail_ldfs, 1.0)
 
+  # create new idf which will be the tail
+  # to the original idf passed to the `ldfs` argument
   out <- idf(
     ldfs = tail_ldfs,
     first_age = first_tail_age
   )
 
-  attr(ldf, "tail") <- out
+  attr(ldfs, "tail") <- out
 
-  ldf
+  ldfs
 }

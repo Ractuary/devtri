@@ -10,7 +10,7 @@ latest(tri)
 \item{tri}{}
 }
 \description{
-get the latest value from a \code{tidy_tri}
+get the latest value from a \code{tri}
 }
 \examples{
 

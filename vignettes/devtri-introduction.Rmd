@@ -26,7 +26,7 @@ head(tri_data, 10)
 Turn the above data frame into a triangle object
 
 ```{r}
-my_tri <- tidy_tri(
+my_tri <- dev_tri(
    origin = tri_data$origin,
    age = tri_data$dev,
    value = tri_data$paid)
@@ -53,7 +53,7 @@ Trinagles in the form shown above will not be used in any of the development fun
 Calculate the agte-to-age development factors and select the development factors we will use in our reserve estimation.
 
 ```{r}
-my_ata <- tidy_ata(my_tri)
+my_ata <- ata_tri(my_tri)
 
 my_ata
 ```
@@ -109,5 +109,17 @@ ldf_avg_wtd(my_tri)
 linearly interpolate our cdf 0.25 periods into the future:
 
 ```{r}
-#interpolate_linear(my_cdf, dev = 0.25)
+interpolate_linear(my_cdf, dev = 0.25)
+```
+
+You can see above that the final value in the `ldf` column is equal to 1.0.  This `ldf` value is set to 1.0 because no tail factor method is set for the `idf` object.  To set a tail for the `idf` object, you pass it to a `tail_*()` function:
+
+```{r}
+my_ldf_w_tail <- idf(
+                   ldfs = c(1.25, 1.05, 1.04),
+                   first_age = 1) %>%
+                   tail_linear()
+
+my_ldf_w_tail
+attr(my_ldf_w_tail, "tail")
 ```

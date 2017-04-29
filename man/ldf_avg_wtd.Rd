@@ -7,10 +7,10 @@
 ldf_avg_wtd(tri)
 }
 \arguments{
-\item{tri}{\code{tidy_tri} object}
+\item{tri}{\code{tri} object}
 }
 \description{
-dollar weighted average of eacg age in a \code{tidy_tri}
+dollar weighted average of eacg age in a \code{tri}
 }
 \examples{
 

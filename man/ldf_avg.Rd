@@ -7,10 +7,10 @@
 ldf_avg(tri, tail = 1)
 }
 \arguments{
-\item{tri}{\code{tidy_tri} object}
+\item{tri}{\code{dev_tri} object}
 }
 \description{
-straight average of eacg age in a \code{tidy_tri}
+straight average of eacg age in a \code{dev_tri}
 }
 \examples{
 

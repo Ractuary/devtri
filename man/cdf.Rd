@@ -4,7 +4,7 @@
 \alias{cdf}
 \title{cdf}
 \usage{
-cdf(ldfs, first_age = 1, tail = NA)
+cdf(ldfs, first_age = 1)
 }
 \arguments{
 \item{ldfs}{the cumulative loss development factors.}

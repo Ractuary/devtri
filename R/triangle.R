@@ -1,6 +1,6 @@
-#' tidy_tri
+#' dev_tri
 #'
-#' \code{tidy_tri} class constructor.
+#' \code{dev_tri} class constructor.
 #'
 #' @param origin origin
 #' @param age age
@@ -16,11 +16,11 @@
 #' age_data <- c(1, 1, 1, 2, 2, 3)
 #' value_data <- c(10, 11, 10, 15, 16, 17)
 #'
-#' my_tri <- triangle(origin = origin_data,
-#'                    age = age_data,
-#'                    value = value_data)
+#' my_tri <- dev_tri(origin = origin_data,
+#'               age = age_data,
+#'               value = value_data)
 #'
-tidy_tri <- function(origin, age, value) {
+dev_tri <- function(origin, age, value) {
 
   tib <- tibble::tibble(
     "origin" = origin,
@@ -30,7 +30,7 @@ tidy_tri <- function(origin, age, value) {
 
   structure(
     tib,
-    class = c("tidy_tri", class(tib))
+    class = c("dev_tri", class(tib))
   )
 }
 
@@ -40,7 +40,7 @@ spread_tri <- function(tri) {
     tidyr::spread(key = age, value = value)
 }
 
-#' tidy_ata
+#' ata_tri
 #'
 #' creates age-to-age development triangles
 #'
@@ -57,16 +57,14 @@ spread_tri <- function(tri) {
 #' age_data <- c(1, 1, 1, 2, 2, 3)
 #' value_data <- c(10, 11, 10, 15, 16, 17)
 #'
-#' tidy_tri <- triangle(origin = origin_data,
-#'                    age = age_data,
-#'                    value = value_data)
+#' my_tri <- dev_tri(origin = origin_data,
+#'                   age = age_data,
+#'                   value = value_data)
 #'
-#' tidy_ata(my_tri)
+#' ata_tri(my_tri)
 #'
-#' tri <- my_tri
-#'
-tidy_ata <- function(tri, ...) {
-  stopifnot(inherits(tri, "tidy_tri"))
+ata_tri <- function(tri, ...) {
+  stopifnot(inherits(tri, "dev_tri"))
 
   out <- tri %>%
     dplyr::group_by(origin) %>%
@@ -89,9 +87,9 @@ tidy_ata <- function(tri, ...) {
 
 #' ldf_avg
 #'
-#' straight average of eacg age in a \code{tidy_tri}
+#' straight average of eacg age in a \code{dev_tri}
 #'
-#' @param tri \code{tidy_tri} object
+#' @param tri \code{dev_tri} object
 #'
 #' @import dplyr
 #'
@@ -101,7 +99,7 @@ tidy_ata <- function(tri, ...) {
 #'
 #'
 ldf_avg <- function(tri, tail = 1.0) {
-  ata <- tidy_ata(tri)
+  ata <- ata_tri(tri)
 
   out <- ata %>%
     dplyr::group_by(age) %>%
@@ -116,9 +114,9 @@ ldf_avg <- function(tri, tail = 1.0) {
 
 #' ldf_avg_wtd
 #'
-#' dollar weighted average of eacg age in a \code{tidy_tri}
+#' dollar weighted average of eacg age in a \code{tri}
 #'
-#' @param tri \code{tidy_tri} object
+#' @param tri \code{tri} object
 #'
 #' @import dplyr
 #'
@@ -145,7 +143,7 @@ ldf_avg_wtd <- function(tri) {
 
 #' latest
 #'
-#' get the latest value from a \code{tidy_tri}
+#' get the latest value from a \code{tri}
 #'
 #' @param tri
 #'

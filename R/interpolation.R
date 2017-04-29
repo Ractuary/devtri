@@ -11,20 +11,20 @@
 #'
 #' @examples
 #'
-#' cdf <- cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
+#' my_cdf <- cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 #'
-#' interpolate_linear(my_cdf)
-interpolate_linear <- function(cdf, dev= 0.5) {
+#' interpolate_linear(my_cdf, dev = 0.25)
+interpolate_linear <- function(ldfs, dev= 0.5) {
 
   stopifnot(dev > 0 && dev < 1)
 
   # cannot interpolate 1 ldf
-  stopifnot(nrow(cdf) > 1)
+  stopifnot(nrow(ldfs) > 1)
 
   # TODO: remove tail here
 
 
-  hold <- cdf %>%
+  hold <- ldfs %>%
     mutate(
       # adjust ldfs to account for ldfs that have not reached the first
       # development age.  These ldfs need to be increased to represent an ldf
@@ -46,7 +46,7 @@ interpolate_linear <- function(cdf, dev= 0.5) {
     select(age, ldf, earned_ratio)
 
 
-  if (is.na(attr(cdf, "tail"))) {
+  if (is.na(attr(ldfs, "tail"))) {
     hold$ldf[hold$age == max(hold$age)] <- 1.0
     #warning("No tail: setting final development factor to 1.0")
   }
@@ -54,8 +54,8 @@ interpolate_linear <- function(cdf, dev= 0.5) {
   # create new cdf object with new tail
   cdf(
     ldfs = hold$ldf,
-    first_age = min(hold$age, na.rm = TRUE),
-    tail = attr(cdf, tail_call)
-  )
+    first_age = min(hold$age, na.rm = TRUE)
+  ) #%>% TDOD: recalculate tail here
+
 
 }
