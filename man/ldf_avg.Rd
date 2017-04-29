@@ -4,7 +4,7 @@
 \alias{ldf_avg}
 \title{ldf_avg}
 \usage{
-ldf_avg(tri, tail = 1)
+ldf_avg(tri)
 }
 \arguments{
 \item{tri}{\code{dev_tri} object}

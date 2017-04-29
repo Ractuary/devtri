@@ -29,14 +29,14 @@ idf <- function(ldfs, first_age = 1) {
     "age" = first_age:last_age,
     "ldf" = ldfs)
 
+  # assumes linear earning pattern
   tib <- tib %>%
     dplyr::mutate(earned_ratio = pmin(age / 1, 1))
 
   structure(
     tib,
-    earn_pattern = "linear",
     tail_call = NA,
-    tail = NA,
+    tail_first_age = NA,
     dev_tri = NA,
     class = c("idf", class(tib))
   )
@@ -77,9 +77,8 @@ cdf <- function(ldfs, first_age = 1) {
 
   out <- structure(
     tib,
-    earn_pattern = "linear",
     tail_call = NA,
-    tail = NA,
+    tail_first_age = NA,
     dev_tri = NA,
     class = c("cdf", class(tib))
   )

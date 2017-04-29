@@ -69,6 +69,14 @@ my_ldf <- ldf_avg(my_tri)
 my_ldf
 ```
 
+This looks pretty good, but it is not quite what we want.  We also need the ldf for age 6.  We can use a tail fitting method to come up with this number, or we can set it manually.  Here we are simply manually setting the tail to 1.0.
+
+```{r}
+my_ldf <- my_ldf %>% tail_selected(1.0)
+
+my_ldf
+```
+
 Convert to cdf
 
 ```{r}
@@ -101,9 +109,12 @@ est
 You can use a dollar weighted average instead of a straight average: 
 
 ```{r}
-my_wtd <- ldf_avg_wtd(my_tri)
+my_wtd <- ldf_avg_wtd(my_tri) %>%
+            tail_selected(1.0)
 my_wtd
 ```
+
+Once again we manually set the tail factor to 1.0.
 
 ### Interpolation
 
@@ -116,11 +127,8 @@ interpolate_linear(my_cdf, dev = 0.25)
 You can see above that the final value in the `ldf` column is equal to 1.0.  This `ldf` value is set to 1.0 because no tail factor method is set for the `idf` object.  To set a tail for the `idf` object, you pass it to a `tail_*()` function:
 
 ```{r}
-my_ldf_w_tail <- idf(
-                   ldfs = c(1.25, 1.05, 1.04),
-                   first_age = 1) %>%
+my_ldf_w_tail <- idf(ldfs = c(1.25, 1.05, 1.04), first_age = 1) %>%
                    tail_linear()
 
 my_ldf_w_tail
-attr(my_ldf_w_tail, "tail")
 ```

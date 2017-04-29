@@ -45,8 +45,8 @@ interpolate_linear <- function(ldfs, dev= 0.5) {
     #filter(!is.na(ldf)) %>%
     select(age, ldf, earned_ratio)
 
-
-  if (is.na(attr(ldfs, "tail"))) {
+  # TODO: need to update this to handle the tail properly
+  if (is.na(attr(ldfs, "tail_first_age"))) {
     hold$ldf[hold$age == max(hold$age)] <- 1.0
     #warning("No tail: setting final development factor to 1.0")
   }

@@ -98,18 +98,16 @@ ata_tri <- function(tri, ...) {
 #' @examples
 #'
 #'
-ldf_avg <- function(tri, tail = 1.0) {
+ldf_avg <- function(tri) {
   ata <- ata_tri(tri)
 
   out <- ata %>%
     dplyr::group_by(age) %>%
     dplyr::summarise(ldfs = mean(value, na.rm = TRUE))
 
-  # assuming tail factor = to 1.0 for placeholder
   ldfs <- out$ldfs
-  ldfs[is.na(ldfs)] <- tail
 
-  out <- idf(ldfs, first_age = min(tri$age))
+  out <- idf(ldfs[-length(ldfs)], first_age = min(tri$age))
 
   attr(out, "dev_tri") <- tri
 
@@ -140,9 +138,9 @@ ldf_avg_wtd <- function(tri) {
     dplyr::mutate(ldfs = value_lead_total / value_total)
 
   # assuming tail factor = to 1.0 for placeholder
-  ldfs <- c(out$ldfs, 1.0)
+  ldfs <- out$ldfs
 
-  out <- idf(ldfs, first_age = min(tri$age))
+  out <- idf(ldfs[-length(ldfs)], first_age = min(tri$age))
 
   attr(out, "dev_tri") <- tri
 
