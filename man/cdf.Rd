@@ -12,7 +12,10 @@ cdf(ldfs, first_age = 1)
 \item{first_age}{the first development age.  This must be a number between 0 and 1.}
 }
 \description{
-Create an object of class \code{cdf}
+Create an object of class \code{cdf}.  This is an internal function because you should
+never create a \code{cdf} object from scratch.  A \code{cdf} object should always first
+be a \code{idf} object that is then converted into a \code{cdf} object using the
+\code{idf2cdf()} function.
 }
 \examples{
 test <- cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)

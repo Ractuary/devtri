@@ -44,7 +44,10 @@ idf <- function(ldfs, first_age = 1) {
 
 #' cdf
 #'
-#' Create an object of class \code{cdf}
+#' Create an object of class \code{cdf}.  This is an internal function because you should
+#' never create a \code{cdf} object from scratch.  A \code{cdf} object should always first
+#' be a \code{idf} object that is then converted into a \code{cdf} object using the
+#' \code{idf2cdf()} function.
 #'
 #' @param ldfs the cumulative loss development factors.
 #' @param first_age the first development age.  This must be a number between 0 and 1.
