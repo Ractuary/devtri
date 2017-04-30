@@ -48,9 +48,8 @@ idf <- function(ldfs, first_age = 1) {
 #'
 #' @param ldfs the cumulative loss development factors.
 #' @param first_age the first development age.  This must be a number between 0 and 1.
-#' @param tail function specifying the tail values.  Not yet implemented.
 #'
-#' @export
+#' @keywords internal
 #'
 #' @import tibble
 #' @import dplyr
@@ -101,11 +100,11 @@ cdf <- function(ldfs, first_age = 1) {
 #' my_idf <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
 #'
 #' idf2cdf(idf = my_idf)
-idf2cdf <- function(idf) {
+idf2cdf <- function(.idf) {
 
-  stopifnot(inherits(idf, "idf"))
+  stopifnot(inherits(.idf, "idf"))
 
-  ldfs_new <- idf
+  ldfs_new <- .idf
 
   ldfs_new$ldf <- ldfs_new$ldf %>%
     rev() %>%
@@ -115,6 +114,55 @@ idf2cdf <- function(idf) {
   # adjust any cdfs with age less 1 full development period
   ldfs_new <- ldfs_new %>% dplyr::mutate(ldf = ldf * earned_ratio)
 
-  cdf(ldfs = ldfs_new$ldf,
-      first_age = ldfs_new$age[1])
+  out <- cdf(ldfs = ldfs_new$ldf,
+           first_age = ldfs_new$age[1])
+
+  attr(out, "tail_call") <- attr(.idf, "tail_call")
+  attr(out, "tail_first_age") <- attr(.idf, "tail_first_age")
+  attr(out, "dev_tri") <- attr(.idf, "dev_tri")
+
+  out
+}
+
+#' idf2cdf
+#'
+#' convert \link{\code{idf}} object to \link{\code{cdf}} object
+#'
+#' @param idf object of class \code{idf}
+#'
+#' @import dplyr
+#'
+#' @export
+#'
+#' @examples
+#'
+#' my_idf <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
+#'
+#' my_cdf <- idf2cdf(idf = .idf)
+#'
+#' test <- cdf2idf(my_cdf)
+cdf2idf <- function(.cdf) {
+
+  stopifnot(inherits(.cdf, "cdf"))
+
+  ldfs_new <- .cdf
+
+  ldfs_new <- ldfs_new %>%
+    dplyr::mutate(ldf_lead = lead(ldf, by = age),
+           ldf_lead = ifelse(is.na(ldf_lead), 1.0, ldf_lead),
+           ldf = ldf / ldf_lead) %>%
+    dplyr::select(age, ldf, earned_ratio)
+
+
+  # adjust any cdfs with age less 1 full development period
+  ldfs_new <- ldfs_new %>% dplyr::mutate(ldf = ldf / earned_ratio)
+
+  out <- idf(ldfs = ldfs_new$ldf,
+           first_age = ldfs_new$age[1])
+
+  attr(out, "tail_call") <- attr(.cdf, "tail_call")
+  attr(out, "tail_first_age") <- attr(.cdf, "tail_first_age")
+  attr(out, "dev_tri") <- attr(.cdf, "dev_tri")
+
+  out
 }

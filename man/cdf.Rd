@@ -10,8 +10,6 @@ cdf(ldfs, first_age = 1)
 \item{ldfs}{the cumulative loss development factors.}
 
 \item{first_age}{the first development age.  This must be a number between 0 and 1.}
-
-\item{tail}{function specifying the tail values.  Not yet implemented.}
 }
 \description{
 Create an object of class \code{cdf}
@@ -20,3 +18,4 @@ Create an object of class \code{cdf}
 test <- cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)
 cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 }
+\keyword{internal}

@@ -4,7 +4,7 @@
 \alias{interpolate_linear}
 \title{interpolate_linear}
 \usage{
-interpolate_linear(ldfs, dev = 0.5)
+interpolate_linear(.cdf, dev = 0.5)
 }
 \arguments{
 \item{dev}{development time to interpolate for}
@@ -18,5 +18,5 @@ interpolate a \code{cdf} object to future ages
 
 my_cdf <- cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 
-interpolate_linear(my_cdf, dev = 0.25)
+interpolate_linear(my_idf, dev = 0.75)
 }

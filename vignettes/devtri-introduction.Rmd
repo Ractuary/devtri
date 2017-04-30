@@ -121,10 +121,11 @@ Once again we manually set the tail factor to 1.0.
 linearly interpolate our cdf 0.25 periods into the future:
 
 ```{r}
-interpolate_linear(my_cdf, dev = 0.25)
+interpolate_linear(my_cdf, dev = 0.25) %>%
+  tail_selected(1.0)
 ```
 
-You can see above that the final value in the `ldf` column is equal to 1.0.  This `ldf` value is set to 1.0 because no tail factor method is set for the `idf` object.  To set a tail for the `idf` object, you pass it to a `tail_*()` function:
+Once again we needed to set our selected tail factor to 1.0.  We needed to specify the tail because our `cdf` object does not have any ldf values past age 6, so calculating the age 6.25 ldf is not possible by interpolation.  To set a tail for the `idf` object, you pass it to a `tail_*()` function:
 
 ```{r}
 my_ldf_w_tail <- idf(ldfs = c(1.25, 1.05, 1.04), first_age = 1) %>%
