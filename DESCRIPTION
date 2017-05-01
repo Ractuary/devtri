@@ -16,7 +16,8 @@ Depends:
     tidyr,
     shiny,
     miniUI,
-    DT
+    DT,
+    rstudioapi
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 Suggests: knitr,
