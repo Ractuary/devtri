@@ -44,21 +44,18 @@ idf <- function(ldfs, first_age = 1) {
 
 #' cdf
 #'
-#' Create an object of class \code{cdf}.  This is an internal function because you should
-#' never create a \code{cdf} object from scratch.  A \code{cdf} object should always first
-#' be a \code{idf} object that is then converted into a \code{cdf} object using the
-#' \code{idf2cdf()} function.
+#' Create an object of class \code{cdf}.
 #'
 #' @param ldfs the cumulative loss development factors.
 #' @param first_age the first development age.  This must be a number between 0 and 1.
 #'
-#' @keywords internal
+#' @export
 #'
 #' @import tibble
 #' @import dplyr
 #'
 #' @examples
-#' test <- cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)
+#' cdf(ldfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)
 #' cdf(ldfs = c(2.70, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 0.5)
 cdf <- function(ldfs, first_age = 1) {
 
@@ -68,6 +65,10 @@ cdf <- function(ldfs, first_age = 1) {
   stopifnot(is.numeric(first_age) && length(first_age) == 1L)
   stopifnot(first_age > 0)
   stopifnot(is.numeric(ldfs) && l > 0)
+
+  # cdfs cannot ever increase
+  diffs <- x %>% rev() %>% diff()
+  stopifnot(all(diffs >= 0))
 
   tib <- tibble(
     "age" = first_age:last_age,
