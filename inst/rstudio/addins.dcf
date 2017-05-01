@@ -1,0 +1,4 @@
+Name: LDF Picker
+Description: Select loss development factors for a development triangle
+Binding: ldf_picker
+Interactive: true

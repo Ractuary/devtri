@@ -133,3 +133,11 @@ my_ldf_w_tail <- idf(ldfs = c(1.25, 1.05, 1.04), first_age = 1) %>%
 
 my_ldf_w_tail
 ```
+
+# Select your own ldfs
+
+Actuaries like to be able to look at the age to age triangle while they make their loss development factor selections.  That is where `ldf_picker()` comes in:
+
+```{r, eval = FALSE}
+ldf_picker(my_tri)
+```

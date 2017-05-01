@@ -34,9 +34,18 @@ dev_tri <- function(origin, age, value) {
   )
 }
 
+# TODO: turn these into generic functions
+
 #' @export
 spread_tri <- function(tri) {
   tri %>%
+    tidyr::spread(key = age, value = value)
+}
+
+#' @export
+spread_ata <- function(.ata) {
+  .ata %>%
+    dplyr::mutate(age = paste0(age, "-", age + 1)) %>%
     tidyr::spread(key = age, value = value)
 }
 

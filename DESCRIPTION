@@ -13,7 +13,10 @@ Depends:
     R (>= 3.3.1),
     tibble,
     dplyr,
-    tidyr
+    tidyr,
+    shiny,
+    miniUI,
+    DT
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 Suggests: knitr,
