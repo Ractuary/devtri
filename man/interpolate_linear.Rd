@@ -7,9 +7,9 @@
 interpolate_linear(.cdf, dev = 0.5)
 }
 \arguments{
-\item{dev}{development time to interpolate for}
+\item{.cdf}{cdf object}
 
-\item{cdf}{cdf object}
+\item{dev}{development time to interpolate for}
 }
 \description{
 interpolate a \code{cdf} object to future ages

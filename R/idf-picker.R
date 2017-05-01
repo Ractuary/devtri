@@ -1,4 +1,4 @@
-#' ldf_picker
+#' idf_picker
 #'
 #' Rstudio addin that allows you to select ldfs for a triangle
 #'

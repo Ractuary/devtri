@@ -2,21 +2,21 @@
 % Please edit documentation in R/ldf.R
 \name{cdf2idf}
 \alias{cdf2idf}
-\title{idf2cdf}
+\title{cdf2idf}
 \usage{
 cdf2idf(.cdf)
 }
 \arguments{
-\item{idf}{object of class \code{idf}}
+\item{.cdf}{object of class \code{cdf}}
 }
 \description{
-convert \link{\code{idf}} object to \link{\code{cdf}} object
+convert \link{\code{cdf}} object to \link{\code{idf}} object
 }
 \examples{
 
-my_idf <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
+my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
 
-my_cdf <- idf2cdf(idf = .idf)
+my_cdf <- idf2cdf(.idf = my_idf)
 
 test <- cdf2idf(my_cdf)
 }

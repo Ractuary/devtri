@@ -2,7 +2,7 @@
 #'
 #' interpolate a \code{cdf} object to future ages
 #'
-#' @param cdf cdf object
+#' @param .cdf cdf object
 #' @param dev development time to interpolate for
 #'
 #' @import dplyr
@@ -26,21 +26,21 @@ interpolate_linear <- function(.cdf, dev= 0.5) {
       # adjust ldfs to account for ldfs that have not reached the first
       # development age.  These ldfs need to be increased to represent an ldf
       # for the full development period
-      ldf = ldf * (1 / earned_ratio),
+      cdfs = cdfs * (1 / earned_ratio),
       # percentage reported
-      pct = 1 / ldf,
+      pct = 1 / cdfs,
       # percentage reported at future period
       pct_lead = lead(pct, order_by = age),
       # linearly interpolate between percentages
-      interp_ldfs = 1 / (pct * dev + (1.0 - dev) * pct_lead),
+      interp_cdfs = 1 / (pct * dev + (1.0 - dev) * pct_lead),
       # adjust age
       age = age + dev,
       # adjust earned ratio
       earned_ratio = pmin(earned_ratio + dev, 1),
       # rebase cdf based on new earned ratio
-      ldf = interp_ldfs * earned_ratio) %>%
-    dplyr::filter(!is.na(ldf)) %>%
-    dplyr::select(age, ldf, earned_ratio)
+      cdfs = interp_cdfs * earned_ratio) %>%
+    dplyr::filter(!is.na(cdfs)) %>%
+    dplyr::select(age, cdfs, earned_ratio)
 
   # Can not interpolate to period before any
   # of the ldfs.  Need extrapolation function if we want to do this.
@@ -48,7 +48,7 @@ interpolate_linear <- function(.cdf, dev= 0.5) {
   # create new cdf object
   # all idf attributes are dropped because triangle and tail stuff are no longer accurate
   cdf(
-    ldfs = hold$ldf,
+    cdfs = hold$cdfs,
     first_age = min(hold$age, na.rm = TRUE)
   )
 }

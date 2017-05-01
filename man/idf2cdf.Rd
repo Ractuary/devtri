@@ -7,14 +7,14 @@
 idf2cdf(.idf)
 }
 \arguments{
-\item{idf}{object of class \code{idf}}
+\item{.idf}{object of class \code{idf}}
 }
 \description{
 convert \link{\code{idf}} object to \link{\code{cdf}} object
 }
 \examples{
 
-my_idf <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
+my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
 
-idf2cdf(idf = my_idf)
+idf2cdf(.idf = my_idf)
 }

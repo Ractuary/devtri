@@ -4,10 +4,10 @@
 \alias{idf}
 \title{idf}
 \usage{
-idf(ldfs, first_age = 1)
+idf(idfs, first_age = 1)
 }
 \arguments{
-\item{ldfs}{the incemental loss development factor to develop lossed 1 period into the
+\item{idfs}{the incemental loss development factor to develop lossed 1 period into the
 future.}
 
 \item{first_age}{the first development age.  This must be a number between 0 and 1.}
@@ -16,8 +16,8 @@ future.}
 Create an object of class \code{idf}
 }
 \examples{
-idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
-idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 0.5)
+idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
+idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 0.5)
 
 test_tail <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 0.5, tail = tail_linear)
 }

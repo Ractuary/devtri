@@ -65,22 +65,22 @@ spread_tri(my_ata)
 Here we are just going to use the straight average for the ldfs.
 
 ```{r }
-my_ldf <- ldf_avg(my_tri)
-my_ldf
+my_idf <- ldf_avg(my_tri)
+my_idf
 ```
 
 This looks pretty good, but it is not quite what we want.  We also need the ldf for age 6.  We can use a tail fitting method to come up with this number, or we can set it manually.  Here we are simply manually setting the tail to 1.0.
 
 ```{r}
-my_ldf <- my_ldf %>% tail_selected(1.0)
+my_idf <- my_idf %>% tail_selected(1.0)
 
-my_ldf
+my_idf
 ```
 
 Convert to cdf
 
 ```{r}
-my_cdf <- idf2cdf(my_ldf)
+my_cdf <- idf2cdf(my_idf)
 my_cdf
 ```
 
@@ -102,7 +102,7 @@ Run development projection
 est <- left_join(my_latest, my_cdf[, -3], by = "age")
 
 est <- est %>%
-         mutate(est_ult = value * ldf)
+         mutate(est_ult = value * cdfs)
 est
 ```
 
@@ -121,23 +121,22 @@ Once again we manually set the tail factor to 1.0.
 linearly interpolate our cdf 0.25 periods into the future:
 
 ```{r}
-interpolate_linear(my_cdf, dev = 0.25) %>%
-  tail_selected(1.0)
+interpolate_linear(my_cdf, dev = 0.25) 
 ```
 
-Once again we needed to set our selected tail factor to 1.0.  We needed to specify the tail because our `cdf` object does not have any ldf values past age 6, so calculating the age 6.25 ldf is not possible by interpolation.  To set a tail for the `idf` object, you pass it to a `tail_*()` function:
+Our `cdf` object does not have any ldf values past age 6, so calculating the age 6.25 ldf is not possible by interpolation.  To set a tail for the `idf` object, you pass it to a `tail_*()` function:
 
 ```{r}
-my_ldf_w_tail <- idf(ldfs = c(1.25, 1.05, 1.04), first_age = 1) %>%
+my_ldf_w_tail <- idf(idfs = c(1.25, 1.05, 1.04), first_age = 1) %>%
                    tail_linear()
 
 my_ldf_w_tail
 ```
 
-# Select your own ldfs
+# Select your own idfs
 
 Actuaries like to be able to look at the age to age triangle while they make their loss development factor selections.  That is where `ldf_picker()` comes in:
 
 ```{r, eval = FALSE}
-ldf_picker(my_tri)
+idf_picker(my_tri)
 ```

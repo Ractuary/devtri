@@ -1,9 +1,9 @@
 #' tail_selected
 #'
-#' manually select your own \code{idf} values to use as a tail
+#' manually select your own idf values to use as a tail
 #'
-#' @param idf object of class \code{idf}
-#' @param ldfs idf tail values
+#' @param .idf object of class \code{idf}
+#' @param idfs incremental development factors to make up tail
 #'
 #' @import dplyr
 #'
@@ -11,14 +11,17 @@
 #'
 #' @examples
 #'
-#' my_idf <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
+#' my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
 #'
 #' test <- tail_selected(my_idf, c(1.02, 1.01, 1.01, 1.0))
+#' test
 #'
 #' # replace existing tail
-#' test2 <- tail_selected(test, c(1.01, 1.0))
+#' tail_selected(test, c(1.01, 1.0))
 #'
-tail_selected <- function(.idf, ldfs) {
+tail_selected <- function(.idf, idfs) {
+
+  stopifnot(inherits(.idf, "idf"))
 
   if (!is.na(attr(.idf, "tail_first_age"))) {
     .idf <- .idf %>% dplyr::filter(age < attr(.idf, "tail_first_age"))
@@ -30,7 +33,7 @@ tail_selected <- function(.idf, ldfs) {
 
   # create new idf with a tail
   out <- idf(
-    ldfs = c(.idf$ldf, ldfs),
+    idfs = c(.idf$idfs, idfs),
     first_age = min(.idf$age)
   )
 
@@ -46,12 +49,12 @@ tail_selected <- function(.idf, ldfs) {
 #'
 #' fit a linear tail factor to ldfs
 #'
-#' @param ldfs an object of class \code{idf} or \code{cdf}
-#' @param n_points number of ldf points to fit.  T
-#' he most mature points will be used in the fit
+#' @param .idf an object of class \code{idf}
+#' @param n_points number of idf points to fit.  The most mature points will be
+#' used in the fit
 #' @param cutoff last age that should have a none 1.0 development factor.  All
 #' loss development factors with an age greater than \code{cutoff} will be set to
-#' 1.0
+#' 1.0.
 #'
 #' @import dplyr
 #'
@@ -59,9 +62,9 @@ tail_selected <- function(.idf, ldfs) {
 #'
 #' @examples
 #'
-#' ldfs <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
+#' my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
 #'
-#' test <- tail_linear(ldfs, cutoff = 10)
+#' test <- tail_linear(my_idf, cutoff = 10)
 #'
 tail_linear <- function(.idf, n_points = 2, cutoff = 25) {
 
@@ -74,7 +77,7 @@ tail_linear <- function(.idf, n_points = 2, cutoff = 25) {
   trimmed <- .idf[(l - n_points + 1):l, ]
 
   # fit the tail and apply fit to calculate tail
-  fit <- lm(trimmed$ldf ~ trimmed$age)
+  fit <- lm(trimmed$idfs ~ trimmed$age)
   co <- coef(fit)
 
   first_tail_age <- .idf$age[l] + 1
@@ -85,7 +88,7 @@ tail_linear <- function(.idf, n_points = 2, cutoff = 25) {
 
   # create new idf with a tail
   out <- idf(
-    ldfs = c(.idf$ldf, tail_ldfs),
+    idfs = c(.idf$idfs, tail_ldfs),
     first_age = min(.idf$age)
   )
 

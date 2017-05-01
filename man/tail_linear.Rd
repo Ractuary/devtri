@@ -7,22 +7,22 @@
 tail_linear(.idf, n_points = 2, cutoff = 25)
 }
 \arguments{
-\item{n_points}{number of ldf points to fit.  T
-he most mature points will be used in the fit}
+\item{.idf}{an object of class \code{idf}}
+
+\item{n_points}{number of idf points to fit.  The most mature points will be
+used in the fit}
 
 \item{cutoff}{last age that should have a none 1.0 development factor.  All
 loss development factors with an age greater than \code{cutoff} will be set to
-1.0}
-
-\item{ldfs}{an object of class \code{idf} or \code{cdf}}
+1.0.}
 }
 \description{
 fit a linear tail factor to ldfs
 }
 \examples{
 
-ldfs <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
+my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
 
-test <- tail_linear(ldfs, cutoff = 10)
+test <- tail_linear(my_idf, cutoff = 10)
 
 }

@@ -4,23 +4,24 @@
 \alias{tail_selected}
 \title{tail_selected}
 \usage{
-tail_selected(.idf, ldfs)
+tail_selected(.idf, idfs)
 }
 \arguments{
-\item{ldfs}{idf tail values}
+\item{.idf}{object of class \code{idf}}
 
-\item{idf}{object of class \code{idf}}
+\item{idfs}{incremental development factors to make up tail}
 }
 \description{
-manually select your own \code{idf} values to use as a tail
+manually select your own idf values to use as a tail
 }
 \examples{
 
-my_idf <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
+my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 1)
 
 test <- tail_selected(my_idf, c(1.02, 1.01, 1.01, 1.0))
+test
 
 # replace existing tail
-test2 <- tail_selected(test, c(1.01, 1.0))
+tail_selected(test, c(1.01, 1.0))
 
 }
