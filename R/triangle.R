@@ -139,6 +139,7 @@ ldf_avg <- function(tri) {
 ldf_avg_wtd <- function(tri) {
 
   out <- tri %>%
+    dplyr::group_by(origin) %>%
     dplyr::mutate(value_lead = dplyr::lead(value, by = age)) %>%
     dplyr::filter(!is.na(value), !is.na(value_lead)) %>%
     dplyr::group_by(age) %>%
