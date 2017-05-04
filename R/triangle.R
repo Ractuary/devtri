@@ -147,10 +147,9 @@ ldf_avg_wtd <- function(tri) {
                      value_lead_total = sum(value_lead)) %>%
     dplyr::mutate(ldfs = value_lead_total / value_total)
 
-  # assuming tail factor = to 1.0 for placeholder
   ldfs <- out$ldfs
 
-  out <- idf(ldfs[-length(ldfs)], first_age = min(tri$age))
+  out <- idf(ldfs, first_age = min(tri$age))
 
   attr(out, "dev_tri") <- tri
 

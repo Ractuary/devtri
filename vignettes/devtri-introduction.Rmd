@@ -11,14 +11,14 @@ vignette: >
 
 The `devtri` package, short for **dev**elopment **tri**angle, makes it easy to work with actuarial loss development triangles.
 
-### Step 1: Load the pakage look at the data
+### Step 1: Load the package and look at the data
 
-We will be working with the `tri_data` data set which comes from the `devtri` package.  This data is just an ordinary data frame with 3 columns.
+We will be working with the `tri_data` data set which comes with the `devtri` package.  This data is just an ordinary data frame with 3 columns and 21 rows.  Here is the entire data set:
 
-```{r load_data, message=FALSE}
+```{r load_data, message=FALSE, warning=FALSE}
 library(devtri)
 
-head(tri_data, 10)
+tri_data
 ```
 
 ### Step 2
@@ -34,7 +34,7 @@ my_tri <- dev_tri(
 my_tri
 ```
 
-This object now includes class `tidy_tri`.
+This object is now of class `dev_tri`.
 
 ```{r}
 class(my_tri)
@@ -46,7 +46,7 @@ As you have probably noticed, this object does not look like a triangle.  It is 
 spread_tri(my_tri)
 ```
 
-Trinagles in the form shown above will not be used in any of the development functions, but they are conventiant for viewing and presenting.
+Trinagles in the form shown above will not be used in any of the development functions, but they are convenient for viewing and presenting.  We will talk more about presentation later.
 
 ### Step 3
 
