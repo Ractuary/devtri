@@ -138,5 +138,6 @@ my_ldf_w_tail
 Actuaries like to be able to look at the age to age triangle while they make their loss development factor selections.  That is where `ldf_picker()` comes in:
 
 ```{r, eval = FALSE}
-idf_picker(my_tri)
+my_sel_idf <- idf_picker(my_tri)
+my_sel_idf
 ```

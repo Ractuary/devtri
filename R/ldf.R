@@ -13,9 +13,11 @@
 #'
 #' @examples
 #' idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
-#' idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 0.5)
+#' test <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 0.5)
 #'
-#' test_tail <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 0.5, tail = tail_linear)
+#' # with tail
+#' idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 0.5) %>%
+#'   tail_selected(1.0)
 idf <- function(idfs, first_age = 1) {
 
   l <- length(idfs)
@@ -25,7 +27,7 @@ idf <- function(idfs, first_age = 1) {
   stopifnot(first_age > 0)
   stopifnot(is.numeric(idfs) && l > 0)
 
-  tib <- tibble(
+  tib <- tibble::tibble(
     "age" = first_age:last_age,
     "idfs" = idfs)
 
@@ -33,12 +35,12 @@ idf <- function(idfs, first_age = 1) {
   tib <- tib %>%
     dplyr::mutate(earned_ratio = pmin(age / 1, 1))
 
-  structure(
+  out <- structure(
     tib,
     tail_call = NA,
     tail_first_age = NA,
     dev_tri = NA,
-    class = c("idf", class(tib))
+    class = c("idf_", class(tib))
   )
 }
 
@@ -83,7 +85,7 @@ cdf <- function(cdfs, first_age = 1) {
     tail_call = NA,
     tail_first_age = NA,
     dev_tri = NA,
-    class = c("cdf", class(tib))
+    class = c("cdf_", class(tib))
   )
 
   out
@@ -91,9 +93,9 @@ cdf <- function(cdfs, first_age = 1) {
 
 #' idf2cdf
 #'
-#' convert \link{\code{idf}} object to \link{\code{cdf}} object
+#' convert \link{\code{idf_}} object to \link{\code{cdf_}} object
 #'
-#' @param .idf object of class \code{idf}
+#' @param idf_ object of class \code{idf_}
 #'
 #' @import dplyr
 #'
@@ -103,12 +105,12 @@ cdf <- function(cdfs, first_age = 1) {
 #'
 #' my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
 #'
-#' idf2cdf(.idf = my_idf)
-idf2cdf <- function(.idf) {
+#' idf2cdf(idf_ = my_idf)
+idf2cdf <- function(idf_) {
 
-  stopifnot(inherits(.idf, "idf"))
+  stopifnot(inherits(idf_, "idf_"))
 
-  cdf_new <- .idf
+  cdf_new <- idf_
 
   # convert idfs to cdfs
   cdf_new$cdfs <- cdf_new$idfs %>%
@@ -122,9 +124,9 @@ idf2cdf <- function(.idf) {
   out <- cdf(cdfs = cdf_new$cdfs,
              first_age = cdf_new$age[1])
 
-  attr(out, "tail_call") <- attr(.idf, "tail_call")
-  attr(out, "tail_first_age") <- attr(.idf, "tail_first_age")
-  attr(out, "dev_tri") <- attr(.idf, "dev_tri")
+  attr(out, "tail_call") <- attr(idf_, "tail_call")
+  attr(out, "tail_first_age") <- attr(idf_, "tail_first_age")
+  attr(out, "dev_tri") <- attr(idf_, "dev_tri")
 
   out
 }
@@ -133,7 +135,7 @@ idf2cdf <- function(.idf) {
 #'
 #' convert \link{\code{cdf}} object to \link{\code{idf}} object
 #'
-#' @param .cdf object of class \code{cdf}
+#' @param cdf_ object of class \code{cdf}
 #'
 #' @import dplyr
 #'
@@ -143,14 +145,14 @@ idf2cdf <- function(.idf) {
 #'
 #' my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
 #'
-#' my_cdf <- idf2cdf(.idf = my_idf)
+#' my_cdf <- idf2cdf(idf_ = my_idf)
 #'
 #' test <- cdf2idf(my_cdf)
-cdf2idf <- function(.cdf) {
+cdf2idf <- function(cdf_) {
 
-  stopifnot(inherits(.cdf, "cdf"))
+  stopifnot(inherits(cdf_, "cdf_"))
 
-  ldfs_new <- .cdf
+  ldfs_new <- cdf_
 
   ldfs_new <- ldfs_new %>%
     dplyr::mutate(ldf_lead = lead(ldf, by = age),
@@ -165,9 +167,32 @@ cdf2idf <- function(.cdf) {
   out <- idf(idfs = ldfs_new$ldf,
              first_age = ldfs_new$age[1])
 
-  attr(out, "tail_call") <- attr(.cdf, "tail_call")
-  attr(out, "tail_first_age") <- attr(.cdf, "tail_first_age")
-  attr(out, "dev_tri") <- attr(.cdf, "dev_tri")
+  attr(out, "tail_call") <- attr(cdf_, "tail_call")
+  attr(out, "tail_first_age") <- attr(cdf_, "tail_first_age")
+  attr(out, "dev_tri") <- attr(cdf_, "dev_tri")
 
   out
+}
+
+
+#' plot.idf_
+#'
+#' generif plot function for class \code{idf_}
+#'
+#' @param idf_ object of class \code{idf_}
+#'
+#' @import plotly
+#'
+#' @export
+#'
+#' @examples
+#'
+#' my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
+#'
+#' plot(my_idf)
+#'
+plot.idf_ <- function(idf_) {
+  plotly::plot_ly(idf_, x = ~age, y = ~idfs, colors="Dark2",
+                  text = ~paste0("IDF: ", idfs),
+                  hoverinfo = "text")
 }

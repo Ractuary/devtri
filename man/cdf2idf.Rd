@@ -4,10 +4,10 @@
 \alias{cdf2idf}
 \title{cdf2idf}
 \usage{
-cdf2idf(.cdf)
+cdf2idf(cdf_)
 }
 \arguments{
-\item{.cdf}{object of class \code{cdf}}
+\item{cdf_}{object of class \code{cdf}}
 }
 \description{
 convert \link{\code{cdf}} object to \link{\code{idf}} object
@@ -16,7 +16,7 @@ convert \link{\code{cdf}} object to \link{\code{idf}} object
 
 my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
 
-my_cdf <- idf2cdf(.idf = my_idf)
+my_cdf <- idf2cdf(idf_ = my_idf)
 
 test <- cdf2idf(my_cdf)
 }

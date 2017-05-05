@@ -12,6 +12,7 @@
 #' @import DT
 #' @import tidyr
 #' @import dplyr
+#' @import plotly
 #'
 idf_picker <- function(.dev_tri) {
 
@@ -92,6 +93,15 @@ idf_picker <- function(.dev_tri) {
             )
           )
         )
+      ),
+      miniTabPanel("Tail", icon = icon("piggy-bank", lib="glyphicon"),
+        miniContentPanel(
+          fluidRow(
+            column(
+              width = 12
+            )
+          )
+        )
       )
     )
   )
@@ -101,6 +111,10 @@ idf_picker <- function(.dev_tri) {
       idf = sel_idf,
       cdf = idf2cdf(sel_idf)
     )
+
+    observeEvent(input$done, {
+      stopApp(sel$idf)
+    })
 
 
     output$idf_1 <- renderPrint({
@@ -121,7 +135,6 @@ idf_picker <- function(.dev_tri) {
         tidyr::spread(key = age, value = cdfs)
       cdf_name_col <- tibble("origin" = "Indicated CDF")
       out <- cbind(cdf_name_col, out)
-      print(out)
       names(out) <- names(idfs)
       out
     })

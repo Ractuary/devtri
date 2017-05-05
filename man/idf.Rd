@@ -17,7 +17,9 @@ Create an object of class \code{idf}
 }
 \examples{
 idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
-idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 0.5)
+test <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 0.5)
 
-test_tail <- idf(ldfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 0.5, tail = tail_linear)
+# with tail
+idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.04, 1.03), first_age = 0.5) \%>\%
+  tail_selected(1.0)
 }
