@@ -194,5 +194,6 @@ cdf2idf <- function(cdf_) {
 plot.idf_ <- function(idf_) {
   plotly::plot_ly(idf_, x = ~age, y = ~idfs, colors="Dark2",
                   text = ~paste0("IDF: ", idfs),
-                  hoverinfo = "text")
+                  hoverinfo = "text",
+                  type = "scatter")
 }
