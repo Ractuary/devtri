@@ -13,10 +13,11 @@
 #' @import tidyr
 #' @import dplyr
 #' @import plotly
+#' @import tibble
 #'
 idf_picker <- function(.dev_tri) {
 
-  idf_names <- tibble("Type" = c("Straight AVG", "Weighted AVG"))
+  idf_names <- tibble::tibble("Type" = c("Straight AVG", "Weighted AVG"))
   s_avg <- ldf_avg(.dev_tri) %>%
              dplyr::select(-earned_ratio) %>%
              tidyr::spread(key = age, value = idfs)
@@ -43,11 +44,11 @@ idf_picker <- function(.dev_tri) {
 
   selected <- as.list(c("Selected IDF", rep(NA, times = length(w_avg) + 1)))
   names(selected) <- names(idfs)
-  selected <- as.tibble(selected)
+  selected <- tibble::as.tibble(selected)
 
   for (i in 2:(n_idfs + 1)) {
     selected[[i]] <- as.character(
-      numericInput(
+      shiny::numericInput(
         inputId = paste0("sel_idf_", i - 1),
         label = NULL,
         value = round(w_avg[[i - 1]], 2),
@@ -98,7 +99,8 @@ idf_picker <- function(.dev_tri) {
         miniContentPanel(
           fluidRow(
             column(
-              width = 12
+              width = 12,
+              plotly::plotlyOutput("idf_plot")
             )
           )
         )
@@ -133,7 +135,7 @@ idf_picker <- function(.dev_tri) {
       out <- sel$cdf %>%
         dplyr::select(-earned_ratio) %>%
         tidyr::spread(key = age, value = cdfs)
-      cdf_name_col <- tibble("origin" = "Indicated CDF")
+      cdf_name_col <- tibble::tibble("origin" = "Indicated CDF")
       out <- cbind(cdf_name_col, out)
       names(out) <- names(idfs)
       out
@@ -152,7 +154,7 @@ idf_picker <- function(.dev_tri) {
           )
         )
       ) %>%
-        formatRound(
+        DT::formatRound(
           columns = 2:length(tri_show),
           digits = 3
         )
@@ -170,7 +172,7 @@ idf_picker <- function(.dev_tri) {
           )
         )
       ) %>%
-        formatRound(
+        DT::formatRound(
           columns = 2:length(tri_show),
           digits = 3
         )
@@ -188,13 +190,13 @@ idf_picker <- function(.dev_tri) {
             list(targets = 0, width = "100px"),
             list(targets = 1:(length(selected) - 1), class = "dt-right")
           ),
-          preDrawCallback = JS('function() { Shiny.unbindAll(this.api().table().node()); }'),
-          drawCallback = JS('function() { Shiny.bindAll(this.api().table().node()); }')
+          preDrawCallback = DT::JS('function() { Shiny.unbindAll(this.api().table().node()); }'),
+          drawCallback = DT::JS('function() { Shiny.bindAll(this.api().table().node()); }')
         ),
         escape = FALSE,
         selection = "none"
       ) %>%
-        formatRound(
+        DT::formatRound(
           columns = 2:length(tri_show),
           digits = 3
         )
@@ -214,10 +216,14 @@ idf_picker <- function(.dev_tri) {
         ),
         selection = "none"
       ) %>%
-        formatRound(
+        DT::formatRound(
           columns = 2:length(tri_show),
           digits = 3
         )
+    })
+
+    output$idf_plot <- plotly::renderPlotly({
+      plot(sel$idf)
     })
   }
 

@@ -18,4 +18,9 @@ my_idf <- idf(idfs = c(1.75, 1.25, 1.15, 1.1, 1.05, 1.03), first_age = 1)
 
 plot(my_idf)
 
+my_idf <- idf(idfs = c(1.25, 1.05, 1.04)) \%>\%
+            tail_selected(c(1.03, 1.02, 1.01, 1.00))
+
+plot(my_idf)
+
 }

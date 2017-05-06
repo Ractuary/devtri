@@ -11,12 +11,12 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.3.1),
-    dplyr
+    dplyr,
+    shiny,
+    miniUI
 Imports:
     tibble,
     tidyr,
-    shiny,
-    miniUI,
     DT,
     rstudioapi,
     plotly

@@ -4,10 +4,10 @@
 \alias{tail_selected}
 \title{tail_selected}
 \usage{
-tail_selected(.idf, idfs)
+tail_selected(idf_, idfs)
 }
 \arguments{
-\item{.idf}{object of class \code{idf}}
+\item{idf_}{object of class \code{idf_}}
 
 \item{idfs}{incremental development factors to make up tail}
 }

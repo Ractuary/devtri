@@ -72,7 +72,7 @@ cdf <- function(cdfs, first_age = 1) {
   diffs <- cdfs %>% rev() %>% diff()
   stopifnot(all(diffs >= 0))
 
-  tib <- tibble(
+  tib <- tibble::tibble(
     "age" = first_age:last_age,
     "cdfs" = cdfs
   )
@@ -182,6 +182,7 @@ cdf2idf <- function(cdf_) {
 #' @param idf_ object of class \code{idf_}
 #'
 #' @import plotly
+#' @import dplyr
 #'
 #' @export
 #'
@@ -191,9 +192,27 @@ cdf2idf <- function(cdf_) {
 #'
 #' plot(my_idf)
 #'
+#' my_idf <- idf(idfs = c(1.25, 1.05, 1.04)) %>%
+#'             tail_selected(c(1.03, 1.02, 1.01, 1.00))
+#'
+#' plot(my_idf)
+#'
 plot.idf_ <- function(idf_) {
-  plotly::plot_ly(idf_, x = ~age, y = ~idfs, colors="Dark2",
+
+  tail_age <- attr(idf_, "tail_first_age")
+  if (!is.na(tail_age)) {
+    idf_ <- idf_ %>%
+              dplyr::mutate(tail = ifelse(tail_age > age, "selected", "tail"))
+  }
+
+
+  plotly::plot_ly(idf_, x = ~age, y = ~idfs,
                   text = ~paste0("IDF: ", idfs),
                   hoverinfo = "text",
-                  type = "scatter")
+                  type = "scatter",
+                  #mode = "lines+markers",
+                  color = ~tail,
+                  name = "IDFs") %>%
+    #plotly::add_lines(y = ~idfs, name = "linear", line = list(shape = "linear"), color = ~tail)
+    plotly::layout(title = "Selected IDFs")
 }

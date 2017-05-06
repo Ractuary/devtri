@@ -4,10 +4,10 @@
 \alias{tail_linear}
 \title{tail_linear}
 \usage{
-tail_linear(.idf, n_points = 2, cutoff = 25)
+tail_linear(idf_, n_points = 2, cutoff = 25)
 }
 \arguments{
-\item{.idf}{an object of class \code{idf}}
+\item{idf_}{an object of class \code{idf_}}
 
 \item{n_points}{number of idf points to fit.  The most mature points will be
 used in the fit}
