@@ -45,21 +45,20 @@ idf_picker <- function(.dev_tri) {
   selected <- as.list(c("Selected IDF", rep(NA, times = length(w_avg) + 1)))
   names(selected) <- names(idfs)
   selected <- tibble::as.tibble(selected)
+  selected[[length(selected)]] <- "Tail Selection"
 
   for (i in 2:(n_idfs + 1)) {
     selected[[i]] <- as.character(
       shiny::numericInput(
         inputId = paste0("sel_idf_", i - 1),
         label = NULL,
-        value = round(w_avg[[i - 1]], 2),
+        value = round(w_avg[[i - 1]], 3),
         min = 0,
         width = "90px",
-        step = 0.01
+        step = 0.001
       )
     )
   }
-
-  selected[[length(selected)]] <- 1.00
 
   ui <- miniPage(
     tags$head(
@@ -102,6 +101,27 @@ idf_picker <- function(.dev_tri) {
               width = 12,
               plotly::plotlyOutput("idf_plot")
             )
+          ),
+          fluidRow(
+            column(
+              width = 4,
+              shiny::selectInput(
+                "tail_fit",
+                "Tail Fit",
+                choices = c(
+                  "Manual Selections" = "manual",
+                  "Linear" = "linear"
+                )
+              )
+            ),
+            column(
+              width = 4,
+              uiOutput("cutoff_input")
+            ),
+            column(
+              width = 4,
+              uiOutput("manual_idfs")
+            )
           )
         )
       )
@@ -113,6 +133,72 @@ idf_picker <- function(.dev_tri) {
       idf = sel_idf,
       cdf = idf2cdf(sel_idf)
     )
+
+    output$cutoff_input <- renderUI({
+      selectInput(
+        "cutoff",
+        "Cutoff Age",
+        choices = attr(isolate({sel$idf}), "tail_first_age"):100
+      )
+    })
+
+    # selected_tail_spread <- reactive({
+    #   sel$idf %>%
+    #     dplyr::select(-earned_ratio) %>%
+    #     tidyr::spread(key = age, value = idfs)
+    # })
+
+
+    output$manual_idfs <-renderUI({
+      out <- lapply(attr(isolate({sel$idf}), "tail_first_age"):as.numeric(input$cutoff), function(i) {
+        fluidRow(
+          hr(style = "margin: 0;"),
+          column(
+            width = 6,
+            h3(
+              style = "text-align: center;",
+              paste0(i, " to ", i + 1)
+            )
+          ),
+          column(
+            width = 6,
+            div(
+              style = "padding-top: 15px;",
+              numericInput(
+                inputId = paste0("tail_ldf_", i),
+                label = NULL,
+                value = 1.0,
+                min = 0
+              )
+            )
+          )
+        )
+      })
+      div(
+        h2(
+          style = "text-align: center",
+          "Tail IDF Selections"
+        ),
+        out
+      )
+    })
+
+
+    observe({
+      tail_age <- attr(sel$idf, "tail_first_age")
+      req(input[[paste0("tail_ldf_", tail_age)]])
+      hold_tail_selections <- vector(mode = "numeric", length = as.numeric(input$cutoff) - tail_age + 1)
+
+      for (j in tail_age:as.numeric(input$cutoff)) {
+        req(input[[paste0("tail_ldf_", j)]])
+        hold_tail_selections[j - tail_age + 1] <- input[[paste0("tail_ldf_", j)]]
+        #print(input[[paste0("tail_ldf_", j)]])
+      }
+      print(hold_tail_selections)
+
+      sel$idf <- sel$idf %>% tail_selected(hold_tail_selections)
+      sel$cdf <- idf2cdf(sel$idf)
+    })
 
     observeEvent(input$done, {
       stopApp(sel$idf)
@@ -133,11 +219,11 @@ idf_picker <- function(.dev_tri) {
 
     cdf_out <- reactive({
       out <- sel$cdf %>%
+        dplyr::filter(age <= attr(sel$cdf, "tail_first_age")) %>%
         dplyr::select(-earned_ratio) %>%
         tidyr::spread(key = age, value = cdfs)
       cdf_name_col <- tibble::tibble("origin" = "Indicated CDF")
       out <- cbind(cdf_name_col, out)
-      names(out) <- names(idfs)
       out
     })
 
