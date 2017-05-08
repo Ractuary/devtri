@@ -202,17 +202,22 @@ plot.idf_ <- function(idf_) {
   tail_age <- attr(idf_, "tail_first_age")
   if (!is.na(tail_age)) {
     idf_ <- idf_ %>%
-              dplyr::mutate(tail = ifelse(tail_age > age, "selected", "tail"))
+              dplyr::mutate(tail = ifelse(tail_age > age, "Selected", "Tail"))
   }
-
 
   plotly::plot_ly(idf_, x = ~age, y = ~idfs,
                   text = ~paste0("IDF: ", idfs),
                   hoverinfo = "text",
                   type = "scatter",
-                  #mode = "lines+markers",
+                  mode = "lines+markers",
                   color = ~tail,
-                  name = "IDFs") %>%
-    #plotly::add_lines(y = ~idfs, name = "linear", line = list(shape = "linear"), color = ~tail)
-    plotly::layout(title = "Selected IDFs")
+                  #name = "",
+                  marker = list(size = 10)) %>%
+    plotly::layout(title = "Selected IDFs",
+                   yaxis = list(title = "IDFs"),
+                   xaxis = list(title = "Age",
+                                rickmode = "linear",
+                                tick0 = ~min(idf_$age),
+                                dtick = 1)) %>%
+    plotly::config(displaylogo = FALSE, displayModeBar = FALSE)
 }
