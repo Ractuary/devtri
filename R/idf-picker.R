@@ -120,11 +120,32 @@ idf_picker <- function(.dev_tri) {
             ),
             column(
               width = 4,
-              uiOutput("manual_idfs")
+              conditionalPanel(
+                condition = "input.tail_fit === 'manual'",
+                uiOutput("manual_idfs")
+              ),
+              conditionalPanel(
+                condition = "input.tail_fit === 'linear'",
+                uiOutput("n_points_input")
+              )
             )
           )
         )
-      )
+      )#,
+      # miniTabPanel("Code", icon = icon("code"),
+      #   miniContentPanel(
+      #     fluidRow(
+      #       column(
+      #         width = 12,
+      #         h3("This is the code that will be returned by the gadget when you hit the 'done' button in the top right corner"),
+      #         div(
+      #           style = "border-style: solid; border-width: 2px;"#,
+      #           #textOutput("code_text")
+      #         )
+      #       )
+      #     )
+      #   )
+      # )
     )
   )
 
@@ -134,6 +155,16 @@ idf_picker <- function(.dev_tri) {
       cdf = idf2cdf(sel_idf)
     )
 
+    # code_out <- reactive({
+    #   idf_call <- deparse(attr(sel$idf, "idf_call"))
+    #   tail_call <- deparse(attr(sel$idf, "tail_call"))
+    #   paste0("# idf_picker() # ", idf_call, " %>% ", tail_call, "\n")
+    # })
+
+    # output$code_text <- renderText({
+    #   code_out()
+    # })
+
     output$cutoff_input <- renderUI({
       selectInput(
         "cutoff",
@@ -142,12 +173,14 @@ idf_picker <- function(.dev_tri) {
       )
     })
 
-    # selected_tail_spread <- reactive({
-    #   sel$idf %>%
-    #     dplyr::select(-earned_ratio) %>%
-    #     tidyr::spread(key = age, value = idfs)
-    # })
-
+    output$n_points_input <- renderUI({
+      selectInput(
+        "n_points",
+        "Number of Points in Fit",
+        choices = 2:(attr(isolate({sel$idf}), "tail_first_age") - 1),
+        selected = "2"
+      )
+    })
 
     output$manual_idfs <-renderUI({
       out <- lapply(attr(isolate({sel$idf}), "tail_first_age"):as.numeric(input$cutoff), function(i) {
@@ -183,7 +216,7 @@ idf_picker <- function(.dev_tri) {
       )
     })
 
-
+    # Manually selected IDFs
     observe({
       tail_age <- attr(sel$idf, "tail_first_age")
       req(input[[paste0("tail_ldf_", tail_age)]])
@@ -192,15 +225,25 @@ idf_picker <- function(.dev_tri) {
       for (j in tail_age:as.numeric(input$cutoff)) {
         req(input[[paste0("tail_ldf_", j)]])
         hold_tail_selections[j - tail_age + 1] <- input[[paste0("tail_ldf_", j)]]
-        #print(input[[paste0("tail_ldf_", j)]])
       }
-      print(hold_tail_selections)
 
       sel$idf <- sel$idf %>% tail_selected(hold_tail_selections)
       sel$cdf <- idf2cdf(sel$idf)
     })
 
+    # Linear IDF extrapolation
+    observeEvent({
+      input$n_points
+      input$cutoff
+    }, {
+      req(input$n_points, input$cutoff)
+      sel$idf <- sel$idf %>% tail_linear(n_points = as.numeric(input$n_points),
+                                         cutoff = as.numeric(input$cutoff))
+      sel$cdf <- idf2cdf(sel$idf)
+    })
+
     observeEvent(input$done, {
+      #rstudioapi::insertText(code_out())
       stopApp(sel$idf)
     })
 
