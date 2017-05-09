@@ -88,8 +88,8 @@ idf_picker <- function(.dev_tri) {
             ),
             column(
               width = 12,
-              DT::dataTableOutput("ind_cdf")#,
-              #verbatimTextOutput("idf_1")
+              DT::dataTableOutput("ind_cdf"),
+              verbatimTextOutput("idf_1")
             )
           )
         )
@@ -216,7 +216,7 @@ idf_picker <- function(.dev_tri) {
       )
     })
 
-    # Manually selected IDFs
+    # Manually selected tail IDFs
     observe({
       tail_age <- attr(sel$idf, "tail_first_age")
       req(input[[paste0("tail_ldf_", tail_age)]])
@@ -255,6 +255,7 @@ idf_picker <- function(.dev_tri) {
 
     sapply(seq_len(n_idfs), function(j) {
       observeEvent(input[[paste0("sel_idf_", j)]], {
+        req(input[[paste0("sel_idf_", j)]])
         sel$idf$idfs[j] <- input[[paste0("sel_idf_", j)]]
         sel$cdf <- idf2cdf(sel$idf)
       }, ignoreInit = TRUE)

@@ -23,13 +23,12 @@ tail_selected <- function(idf_, idfs) {
 
   stopifnot(inherits(idf_, "idf_"))
 
+  # remove previous tail if it exists
   if (!is.na(attr(idf_, "tail_first_age"))) {
     idf_ <- idf_ %>% dplyr::filter(age < attr(idf_, "tail_first_age"))
   }
 
   l <- nrow(idf_)
-
-  first_tail_age <- idf_$age[l] + 1
 
   # create new idf with a tail
   out <- idf(
@@ -37,8 +36,7 @@ tail_selected <- function(idf_, idfs) {
     first_age = min(idf_$age)
   )
 
-  attr(out, "tail_call") <- match.call()
-  attr(out, "tail_first_age") <- first_tail_age
+  attr(out, "tail_first_age") <- idf_$age[l] + 1
 
   out
 }
@@ -92,7 +90,6 @@ tail_linear <- function(idf_, n_points = 2, cutoff = 25) {
     first_age = min(idf_$age)
   )
 
-  attr(out, "tail_call") <- match.call()
   attr(out, "tail_first_age") <- first_tail_age
 
   out

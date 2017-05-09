@@ -12,7 +12,7 @@ cdf(cdfs, first_age = 1)
 \item{first_age}{the first development age.  This must be a number between 0 and 1.}
 }
 \description{
-Create an object of class \code{cdf}.
+Create an object of class \code{cdf_}.
 }
 \examples{
 cdf(cdfs = c(2.40, 1.5, 1.2, 1.15, 1.08, 1.03), first_age = 1)

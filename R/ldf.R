@@ -37,16 +37,16 @@ idf <- function(idfs, first_age = 1) {
 
   out <- structure(
     tib,
-    tail_call = NA,
     tail_first_age = NA,
     dev_tri = NA,
     class = c("idf_", class(tib))
   )
 }
 
+
 #' cdf
 #'
-#' Create an object of class \code{cdf}.
+#' Create an object of class \code{cdf_}.
 #'
 #' @param cdfs the cumulative loss development factors.
 #' @param first_age the first development age.  This must be a number between 0 and 1.
@@ -82,7 +82,6 @@ cdf <- function(cdfs, first_age = 1) {
 
   out <- structure(
     tib,
-    tail_call = NA,
     tail_first_age = NA,
     dev_tri = NA,
     class = c("cdf_", class(tib))
@@ -124,7 +123,6 @@ idf2cdf <- function(idf_) {
   out <- cdf(cdfs = cdf_new$cdfs,
              first_age = cdf_new$age[1])
 
-  attr(out, "tail_call") <- attr(idf_, "tail_call")
   attr(out, "tail_first_age") <- attr(idf_, "tail_first_age")
   attr(out, "dev_tri") <- attr(idf_, "dev_tri")
 
