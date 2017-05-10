@@ -4,16 +4,38 @@
 \name{tri_data}
 \alias{tri_data}
 \title{Data for making example triangles}
-\format{A data frame with 21 rows and 3 variables:
+\format{A data frame with 21 rows and 7 variables:
 \describe{
+  \item{lob}{Line of Business}
+  \item{gr_code}{Unique company code}
+  \item{gr_name}{Company name}
   \item{origin}{the origin period of the losses}
   \item{dev}{the development age of the losses}
-  \item{value}{the value of the losses}
+  \item{incurred}{the cumulative incurred losses}
+  \item{paid}{the cumulative paid losses}
 }}
 \usage{
 tri_data
 }
 \description{
-Data for making example triangles
+This data is a subset of the the \code{losses} data frame from the
+\code{casdata} package available on Github \code{https://github.com/Ractuary/casdata}
+}
+\examples{
+# code used to create this dataset
+if (interactive()) {
+  library(casdata)
+  library(dplyr)
+  library(devtools)
+
+  tri_data <- losses \%>\% filter(lob == "wkcomp", gr_code == 671, origin >= 1992) \%>\%
+                mutate(cal = origin + dev - 1) \%>\%
+                filter(cal <= 1997) \%>\%
+                select(-bulk, -cal)
+
+   use_data(tri_data, overwrite = TRUE)
+}
+
+
 }
 \keyword{datasets}
