@@ -2,6 +2,7 @@ Package: devtri
 Type: Package
 Title: Easily work with actuarial development triangles
 Version: 0.0.0.9000
+Date: 2017-05-10
 Authors@R: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Work with actuarial development triangles to select loss development factors and
