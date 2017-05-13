@@ -69,8 +69,8 @@ cdf <- function(cdfs, first_age = 1) {
   stopifnot(is.numeric(cdfs) && l > 0)
 
   # cdfs cannot ever increase
-  diffs <- cdfs %>% rev() %>% diff()
-  stopifnot(all(diffs >= 0))
+  #diffs <- cdfs %>% rev() %>% diff()
+  #stopifnot(all(diffs >= 0))
 
   tib <- tibble::tibble(
     "age" = first_age:last_age,
