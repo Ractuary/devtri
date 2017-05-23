@@ -13,7 +13,7 @@ The `devtri` package, short for **dev**elopment **tri**angle, makes it easy to w
 
 ### Step 1: Load the package and look at the data
 
-We will be working with the `tri_data` data set which comes with the `devtri` package.  This data is just an ordinary data frame with 3 columns and 21 rows.  Here is the entire data set:
+We will be working with the `tri_data` data set which comes with the `devtri` package.  This data is just an ordinary data frame with 7 columns and 21 rows.  Here is the entire data set:
 
 ```{r load_data, message=FALSE, warning=FALSE}
 library(devtri)
@@ -21,9 +21,11 @@ library(devtri)
 tri_data
 ```
 
+This data contains workers' compensation loss data from the Farm Bureau of MI Group.  The `origin` column is the period in which the losses originated (likely the accident or policy year), the `dev` column indicates the maturity of the origin period.
+
 ### Step 2
 
-Turn the above data frame into a triangle object
+Turn the above data frame into a triangle object.
 
 ```{r}
 my_tri <- dev_tri(
@@ -40,17 +42,17 @@ This object is now of class `dev_tri`.
 class(my_tri)
 ```
 
-As you have probably noticed, this object does not look like a triangle.  It is still in tidy/long form where each row represents one observation.  Keeping the data in a tidy form makes it much easier to work with. If you want to create an actual triange, run: 
+As you have probably noticed, this object is not shaped like a triangle.  It is still in tidy/long form where each row represents one observation.  Keeping the data in a tidy form makes it much easier to work with. If you want to create an actual triange, run: 
 
 ```{r}
 spread_tri(my_tri)
 ```
 
-Trinagles in the form shown above will not be used in any of the development functions, but they are convenient for viewing and presenting.  We will talk more about presentation later.
+Triangles in the form shown above will not be used in any of the development functions, but they are convenient for viewing and presenting.  We will talk more about presentation later.
 
 ### Step 3
 
-Calculate the agte-to-age development factors and select the development factors we will use in our reserve estimation.
+Calculate the age-to-age development factors and select the development factors we will use in our reserve estimation.
 
 ```{r}
 my_ata <- ata_tri(my_tri)
