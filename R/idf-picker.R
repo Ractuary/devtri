@@ -76,19 +76,19 @@ idf_picker <- function(.dev_tri) {
           fluidRow(
             column(
               width = 12,
-              DT::dataTableOutput("tri")
+              DT::DTOutput("tri")
             ),
             column(
               width = 12,
-              DT::dataTableOutput("idf_est")
+              DT::DTOutput("idf_est")
             ),
             column(
               width = 12,
-              DT::dataTableOutput("sel_tbl")
+              DT::DTOutput("sel_tbl")
             ),
             column(
               width = 12,
-              DT::dataTableOutput("ind_cdf"),
+              DT::DTOutput("ind_cdf"),
               verbatimTextOutput("idf_1")
             )
           )
@@ -271,7 +271,7 @@ idf_picker <- function(.dev_tri) {
       out
     })
 
-    output$tri <- DT::renderDataTable({
+    output$tri <- DT::renderDT({
       DT::datatable(
         tri_show,
         rownames = FALSE,
@@ -290,7 +290,7 @@ idf_picker <- function(.dev_tri) {
         )
     })
 
-    output$idf_est <- DT::renderDataTable({
+    output$idf_est <- DT::renderDT({
       DT::datatable(
         idfs,
         rownames = FALSE,
@@ -308,7 +308,7 @@ idf_picker <- function(.dev_tri) {
         )
     })
 
-    output$sel_tbl <- DT::renderDataTable({
+    output$sel_tbl <- DT::renderDT({
       DT::datatable(
         selected,
         rownames = FALSE,
@@ -332,7 +332,7 @@ idf_picker <- function(.dev_tri) {
         )
     })
 
-    output$ind_cdf <- DT::renderDataTable({
+    output$ind_cdf <- DT::renderDT({
       DT::datatable(
         cdf_out(),
         rownames = FALSE,
