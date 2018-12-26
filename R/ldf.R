@@ -92,7 +92,7 @@ cdf <- function(cdfs, first_age = 1) {
 
 #' idf2cdf
 #'
-#' convert \link{\code{idf_}} object to \link{\code{cdf_}} object
+#' convert \code{idf} object to \code{cdf} object
 #'
 #' @param idf_ object of class \code{idf_}
 #'
@@ -131,7 +131,7 @@ idf2cdf <- function(idf_) {
 
 #' cdf2idf
 #'
-#' convert \link{\code{cdf}} object to \link{\code{idf}} object
+#' convert \code{cdf} object to \code{idf} object
 #'
 #' @param cdf_ object of class \code{cdf}
 #'

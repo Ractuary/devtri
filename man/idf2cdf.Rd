@@ -10,7 +10,7 @@ idf2cdf(idf_)
 \item{idf_}{object of class \code{idf_}}
 }
 \description{
-convert \link{\code{idf_}} object to \link{\code{cdf_}} object
+convert \code{idf} object to \code{cdf} object
 }
 \examples{
 
