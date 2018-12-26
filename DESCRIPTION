@@ -1,8 +1,8 @@
 Package: devtri
 Type: Package
 Title: Easily work with actuarial development triangles
-Version: 0.0.0.9000
-Date: 2017-05-10
+Version: 0.0.0.9001
+Date: 2018-12-26
 Authors@R: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Work with actuarial development triangles to select loss development factors and
@@ -22,6 +22,6 @@ Imports:
     rstudioapi,
     plotly
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown
