@@ -78,7 +78,7 @@ ata_tri <- function(tri, ...) {
   out <- tri %>%
     dplyr::group_by(origin) %>%
     dplyr::mutate(
-      value_lead = dplyr::lead(value, by = age),
+      value_lead = dplyr::lead(value, order_by = age),
       value = value_lead / value) %>%
     ungroup() %>%
     dplyr::select(origin, age, value)
@@ -140,7 +140,7 @@ ldf_avg_wtd <- function(tri) {
 
   out <- tri %>%
     dplyr::group_by(origin) %>%
-    dplyr::mutate(value_lead = dplyr::lead(value, by = age)) %>%
+    dplyr::mutate(value_lead = dplyr::lead(value, order_by = age)) %>%
     dplyr::filter(!is.na(value), !is.na(value_lead)) %>%
     dplyr::group_by(age) %>%
     dplyr::summarise(value_total = sum(value),
